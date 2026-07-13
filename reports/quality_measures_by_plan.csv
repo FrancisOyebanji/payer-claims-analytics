@@ -1,0 +1,21 @@
+plan_type,measure,eligible_population,numerator,rate_pct
+HMO,Diabetes care engagement (proxy CDC measure),275,172,62.5
+HMO,Follow-up after inpatient stay (FUH-style),589,466,79.1
+HMO,"Members not ED-reliant (EDU-style, inverse)",1366,1022,74.8
+HMO,Behavioral health engagement (AMM-style proxy),336,246,73.2
+HMO,Chronic pharmacy engagement (PDC-inspired proxy),1209,301,24.9
+Medicaid MCO,Diabetes care engagement (proxy CDC measure),197,124,62.9
+Medicaid MCO,Follow-up after inpatient stay (FUH-style),432,337,78.0
+Medicaid MCO,"Members not ED-reliant (EDU-style, inverse)",1003,758,75.6
+Medicaid MCO,Behavioral health engagement (AMM-style proxy),282,219,77.7
+Medicaid MCO,Chronic pharmacy engagement (PDC-inspired proxy),876,204,23.3
+Medicare Advantage,Diabetes care engagement (proxy CDC measure),135,86,63.7
+Medicare Advantage,Follow-up after inpatient stay (FUH-style),278,215,77.3
+Medicare Advantage,"Members not ED-reliant (EDU-style, inverse)",675,513,76.0
+Medicare Advantage,Behavioral health engagement (AMM-style proxy),175,133,76.0
+Medicare Advantage,Chronic pharmacy engagement (PDC-inspired proxy),613,118,19.2
+PPO,Diabetes care engagement (proxy CDC measure),339,199,58.7
+PPO,Follow-up after inpatient stay (FUH-style),690,517,74.9
+PPO,"Members not ED-reliant (EDU-style, inverse)",1610,1221,75.8
+PPO,Behavioral health engagement (AMM-style proxy),398,296,74.4
+PPO,Chronic pharmacy engagement (PDC-inspired proxy),1415,307,21.7

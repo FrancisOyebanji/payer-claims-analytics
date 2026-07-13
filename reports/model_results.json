@@ -1,0 +1,29 @@
+{
+  "n_train": 6000,
+  "n_test": 2000,
+  "base_rate": 0.1,
+  "baseline_logreg": {
+    "roc_auc": 0.8341,
+    "avg_precision": 0.5156
+  },
+  "gradient_boosting": {
+    "roc_auc": 0.8291,
+    "avg_precision": 0.4918,
+    "lift_at_5pct": 6.1,
+    "lift_at_10pct": 4.65,
+    "capture_at_10pct": 0.465,
+    "capture_at_20pct": 0.66
+  },
+  "top_features": {
+    "y1_claim_count": 0.4837,
+    "y1_paid_pharmacy": 0.0886,
+    "y1_paid_specialist": 0.0397,
+    "age": 0.0397,
+    "y1_paid_outpatient": 0.0369,
+    "y1_paid_primary_care": 0.0329,
+    "y1_total_paid": 0.0323,
+    "y1_avg_claim": 0.0313,
+    "y1_paid_emergency": 0.0273,
+    "condition_count": 0.0273
+  }
+}

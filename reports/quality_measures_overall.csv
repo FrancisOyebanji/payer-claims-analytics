@@ -1,0 +1,6 @@
+measure,eligible_population,numerator,rate_pct
+Diabetes care engagement (proxy CDC measure),946,581,61.4
+Follow-up after inpatient stay (FUH-style),1989,1535,77.2
+"Members not ED-reliant (EDU-style, inverse)",4654,3514,75.5
+Behavioral health engagement (AMM-style proxy),1191,894,75.1
+Chronic pharmacy engagement (PDC-inspired proxy),4113,930,22.6
