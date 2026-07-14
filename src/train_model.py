@@ -24,6 +24,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
 from features import feature_columns
+from mars import MARSClassifier
 
 SEED = 42
 
@@ -61,6 +62,11 @@ def train_and_evaluate(feats: pd.DataFrame, fig_dir: str | Path) -> dict:
     model.fit(X_tr, y_tr)
     p = model.predict_proba(X_te)[:, 1]
 
+    # MARS: adaptive hinge basis + logistic output (see src/mars.py)
+    mars = MARSClassifier(max_terms=24, n_knots=7, penalty=3.0)
+    mars.fit(X_tr, y_tr)
+    p_mars = mars.predict_proba(X_te)[:, 1]
+
     results = {
         "n_train": int(len(y_tr)), "n_test": int(len(y_te)),
         "base_rate": round(float(y.mean()), 4),
@@ -76,13 +82,23 @@ def train_and_evaluate(feats: pd.DataFrame, fig_dir: str | Path) -> dict:
             "capture_at_10pct": round(capture_at_k(y_te, p, 0.10), 3),
             "capture_at_20pct": round(capture_at_k(y_te, p, 0.20), 3),
         },
+        "mars": {
+            "roc_auc": round(roc_auc_score(y_te, p_mars), 4),
+            "avg_precision": round(average_precision_score(y_te, p_mars), 4),
+            "lift_at_5pct": round(lift_at_k(y_te, p_mars, 0.05), 2),
+            "capture_at_20pct": round(capture_at_k(y_te, p_mars, 0.20), 3),
+            "n_basis_functions": len(mars.hinges_),
+            "selected_basis": [f"{cols[h.feature]}: {h!r}" for h in mars.hinges_[:12]],
+        },
     }
 
     # --- Figures ---
     fpr_b, tpr_b, _ = roc_curve(y_te, p_base)
     fpr_m, tpr_m, _ = roc_curve(y_te, p)
+    fpr_s, tpr_s, _ = roc_curve(y_te, p_mars)
     plt.figure(figsize=(6, 5))
     plt.plot(fpr_m, tpr_m, label=f"Gradient boosting (AUC {results['gradient_boosting']['roc_auc']})")
+    plt.plot(fpr_s, tpr_s, label=f"MARS (AUC {results['mars']['roc_auc']})", color="#2ca86b")
     plt.plot(fpr_b, tpr_b, "--", label=f"Logistic baseline (AUC {results['baseline_logreg']['roc_auc']})")
     plt.plot([0, 1], [0, 1], ":", color="gray")
     plt.xlabel("False positive rate"); plt.ylabel("True positive rate")
@@ -99,6 +115,7 @@ def train_and_evaluate(feats: pd.DataFrame, fig_dir: str | Path) -> dict:
     ks = np.arange(0.02, 0.52, 0.02)
     plt.figure(figsize=(6.5, 5))
     plt.plot(ks * 100, [capture_at_k(y_te, p, k) * 100 for k in ks], label="Gradient boosting")
+    plt.plot(ks * 100, [capture_at_k(y_te, p_mars, k) * 100 for k in ks], label="MARS", color="#2ca86b")
     plt.plot(ks * 100, [capture_at_k(y_te, p_base, k) * 100 for k in ks], "--", label="Logistic baseline")
     plt.plot(ks * 100, ks * 100, ":", color="gray", label="Random targeting")
     plt.xlabel("% of members targeted (ranked by model score)")

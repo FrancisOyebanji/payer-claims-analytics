@@ -8,15 +8,14 @@ Using only year-1 claims utilization, demographics, chronic-condition flags, and
 
 ## Model performance (held-out test set, n=2,000)
 
-| Metric | Logistic baseline | Gradient boosting |
-|---|---|---|
-| ROC-AUC | **0.834** | 0.829 |
-| Average precision | **0.516** | 0.492 |
-| Lift @ top 5% | — | 6.1x |
-| Capture @ top 10% | — | 46.5% |
-| Capture @ top 20% | — | 66.0% |
+| Metric | Logistic baseline | Gradient boosting | MARS |
+|---|---|---|---|
+| ROC-AUC | 0.834 | 0.829 | **0.834** |
+| Average precision | 0.516 | 0.492 | **0.525** |
+| Lift @ top 5% | — | 6.1x | **6.7x** |
+| Capture @ top 20% | — | 66.0% | **66.5%** |
 
-**An honest finding worth leading with:** the regularized logistic baseline slightly outperforms gradient boosting on AUC. On this data, prior-year utilization is such a dominant, near-linear signal that model complexity buys little. In a client setting this is the recommendation: deploy the simpler, more explainable model, and invest the complexity budget in better features (lab values, pharmacy adherence, prior-auth history) rather than better algorithms. Chasing decimal points of AUC with black-box models is how analytics teams lose Chief Actuaries.
+**An honest finding worth leading with:** the two simpler models beat gradient boosting. Prior-year utilization is such a dominant, near-linear signal here that black-box complexity buys nothing. The recommended model is MARS (multivariate adaptive regression splines, implemented from scratch in `src/mars.py`): it matches the logistic baseline on AUC, wins on precision and lift, and its entire decision logic is 12 human-readable hinge functions — e.g., risk inflects above ~$1,350 in year-1 pharmacy spend, past age 44, and at the first chronic condition. Those knots aren't just model internals; they're presentation-ready thresholds a Chief Actuary can interrogate. Chasing decimal points of AUC with unexplainable models is how analytics teams lose that room.
 
 ## What drives risk
 
